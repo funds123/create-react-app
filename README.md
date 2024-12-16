@@ -96,7 +96,20 @@ Once the installation is done, you can open your project folder:
 
 ```sh
 cd my-app
-```
+```// my-app.js, treated as an ES module because there is a package.json
+// file in the same folder with "type": "module".
+
+import './startup/init.js';
+// Loaded as ES module since ./startup contains no package.json file,
+// and therefore inherits the "type" value from one level up.
+
+import 'commonjs-package';
+// Loaded as CommonJS since ./node_modules/commonjs-package/package.json
+// lacks a "type" field or contains "type": "commonjs".
+
+import './node_modules/commonjs-package/index.js';
+// Loaded as CommonJS since ./node_modules/commonjs-package/package.json
+// lacks a "type" field or contains "type": "commonjs".
 
 Inside the newly created project, you can run some built-in commands:
 
@@ -107,7 +120,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will automatically reload if you make changes to the code.<br>
 You will see the build errors and lint warnings in the console.
+'import './legacy-file.cjs';
+// Loaded as CommonJS since .cjs is always loaded as CommonJS.
 
+import 'commonjs-package/src/index.mjs';
+// Loaded as ES module since .mjs is always loaded as ES module.
 <p align='center'>
 <img src='https://cdn.jsdelivr.net/gh/marionebl/create-react-app@9f6282671c54f0874afd37a72f6689727b562498/screencast-error.svg' width='600' alt='Build errors'>
 </p>
